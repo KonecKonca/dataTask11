@@ -14,6 +14,7 @@ create table streets
 	constraint streets_pk
 		primary key (street_id)
 );
+alter table streets modify name varchar(256) null;
 create table locations
 (
 	location_id bigint auto_increment,

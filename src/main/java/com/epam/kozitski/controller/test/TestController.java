@@ -15,6 +15,9 @@ import java.util.List;
 
 @Controller
 public class TestController {
+    private static final String RESLUT_MESSAGE = "resultMessage";
+    private static final String DB_UPDATE_MESSGE = "DB has correctly updated";
+    private static final String DB_CLEAR_MESSGE = "DB has correctly cleared";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -41,6 +44,25 @@ public class TestController {
         model.addAttribute("crimes", allCrimes);
 
         return "crimes";
+    }
+
+    @GetMapping("/addToDbAllCrimes")
+    public String addToDbAllCrimes(Model model) throws URISyntaxException {
+        List<Crime> allCrimes = crimeService.getAllCrimes("52.268,0.543:52.794,0.238:52.130,0.478", "2017-01");
+        crimeService.updateDb(allCrimes);
+
+        model.addAttribute(RESLUT_MESSAGE, DB_UPDATE_MESSGE);
+
+        return "index";
+    }
+
+    @GetMapping("/clearDB")
+    public String clearDB(Model model) {
+        crimeService.clearDb();
+
+        model.addAttribute(RESLUT_MESSAGE, DB_CLEAR_MESSGE);
+
+        return "index";
     }
 
 }

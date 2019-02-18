@@ -4,7 +4,7 @@
 </head>
 <body>
 
-    Any text
+    <h2>${resultMessage}</h2>
 
 </body>
 </html>

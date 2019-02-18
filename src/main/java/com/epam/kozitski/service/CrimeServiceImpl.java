@@ -1,5 +1,6 @@
 package com.epam.kozitski.service;
 
+import com.epam.kozitski.dao.CrimeDao;
 import com.epam.kozitski.domain.Crime;
 import com.epam.kozitski.dto.CrimeDto;
 import com.epam.kozitski.util.CrimeDtoMapper;
@@ -28,6 +29,12 @@ public class CrimeServiceImpl implements CrimeService{
         this.crimeDtoMapper = crimeDtoMapper;
     }
 
+    private CrimeDao crimeDao;
+    @Autowired
+    public void setCrimeDao(CrimeDao crimeDao) {
+        this.crimeDao = crimeDao;
+    }
+
     @Override
     public List<Crime> getAllCrimes(String poly, String date) throws URISyntaxException {
         RestTemplate restTemplate = new RestTemplate();
@@ -49,15 +56,18 @@ public class CrimeServiceImpl implements CrimeService{
         CrimeDto[] crimeDtos = restTemplate.getForObject(uri, CrimeDto[].class);
 
         ArrayList<CrimeDto> crimesList = new ArrayList<>(Arrays.asList(crimeDtos));
-        List<Crime> crimes = crimeDtoMapper.mapToListCrimes(crimesList);
 
-        return crimes;
+        return crimeDtoMapper.mapToListCrimes(crimesList);
     }
 
     @Override
-    public void clearDb() { }
+    public void clearDb() {
+        crimeDao.clearDb();
+    }
 
     @Override
-    public void updateDb(List<Crime> crimes) { }
+    public void updateDb(List<Crime> crimes) {
+        crimeDao.insertAll(crimes);
+    }
 
 }
